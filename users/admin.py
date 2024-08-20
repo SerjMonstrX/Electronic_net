@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from users.models import User
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'is_active', 'is_moderator')
+    list_display = ('email', 'is_active', 'is_moderator', )
     list_filter = ('is_active', 'is_moderator')
     search_fields = ('email', 'is_active')
 
@@ -19,7 +20,9 @@ class UserAdmin(admin.ModelAdmin):
     is_moderator.boolean = True
     is_moderator.short_description = 'Is Moderator'
 
+
 admin.site.unregister(Group)
+
 
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'user_count')
@@ -27,5 +30,6 @@ class GroupAdmin(admin.ModelAdmin):
     def user_count(self, obj):
         return obj.user_set.count()
     user_count.short_description = 'Number of Users'
+
 
 admin.site.register(Group, GroupAdmin)

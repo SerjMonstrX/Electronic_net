@@ -1,7 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
-from django.utils.translation import gettext_lazy as _
+
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -35,7 +35,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(verbose_name='email', unique=True)
     is_moderator = models.BooleanField(default=False, verbose_name='Модератор')
-    is_employee = models.BooleanField(default=False, verbose_name='Сотрудник')
+    is_active = models.BooleanField(default=True, verbose_name='Активный сотрудник')
     objects = UserManager()
 
     class Meta:
@@ -55,8 +55,3 @@ class User(AbstractUser):
             self.groups.add(moderators_group)
         else:
             self.groups.remove(moderators_group)
-
-        if self.is_employee:
-            self.groups.add(employees_group)
-        else:
-            self.groups.remove(employees_group)

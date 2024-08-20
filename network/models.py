@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -12,6 +15,7 @@ class NetworkEntity(models.Model):
         (2, 'индивидуальный предприниматель'),
     )
 
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='создатель')
     name = models.CharField(max_length=255, verbose_name='название')
     email = models.EmailField(verbose_name='email')
     country = models.CharField(max_length=100, verbose_name='страна')

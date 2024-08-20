@@ -4,21 +4,24 @@ from django.urls import reverse
 from products.models import Product
 from .models import NetworkEntity
 
+
 class ProductInline(admin.TabularInline):
     model = Product
     extra = 1
+
 
 @admin.action(description='Очистить задолженность перед поставщиком')
 def clear_supplier_debt(self, request, queryset):
     updated_count = queryset.update(debt=0)
     self.message_user(request, f'Задолженность перед поставщиком очищена для {updated_count} объектов.')
 
+
 @admin.register(NetworkEntity)
 class NetworkEntityAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'email', 'country', 'city', 'street', 'building_number', 'supplier_link', 'debt', 'created_at', 'level')
+        'name', 'creator', 'email', 'country', 'city', 'street', 'building_number', 'supplier_link', 'debt', 'created_at', 'level')
     list_filter = ('city',)
-    search_fields = ('name', 'city', 'country')
+    search_fields = ('name', 'city', 'country', 'creator',)
     readonly_fields = ('created_at',)
     inlines = [ProductInline]
     actions = [clear_supplier_debt]

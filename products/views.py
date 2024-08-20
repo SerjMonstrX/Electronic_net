@@ -1,4 +1,6 @@
 from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
+
 from network.permissions import IsOwner, IsModerator, IsActiveUser
 from .models import Product
 from .serializers import ProductSerializer
@@ -13,10 +15,13 @@ class ProductCreateView(generics.CreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated, IsActiveUser]
 
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
 
 class ProductListView(generics.ListAPIView):
     """
-    API-представление для получения списка всех продуктов с возможностью фильтрации по стране.
+    API-представление для получения списка всех продуктов.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -40,6 +45,15 @@ class ProductUpdateView(generics.UpdateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated, IsActiveUser, IsOwner | IsModerator]
 
+    def perform_update(self, serializer):
+        user = self.request.user
+        product_id = self.kwargs['pk']
+        product = Product.objects.get(pk=product_id)
+        if product.creator == user or user.groups.filter(name='moderators').exists():
+            serializer.save()
+        else:
+            raise PermissionDenied("У вас нет разрешения редактировать этот раздел.")
+
 
 class ProductDeleteView(generics.DestroyAPIView):
     """
@@ -47,4 +61,3 @@ class ProductDeleteView(generics.DestroyAPIView):
     """
     queryset = Product.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsActiveUser, IsOwner | IsModerator]
-

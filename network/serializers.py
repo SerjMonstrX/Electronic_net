@@ -9,3 +9,4 @@ class NetworkEntitySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'debt': {'read_only': True}  # Запрещаем обновление поля "debt" через API
         }
+        read_only_fields = ['creator']

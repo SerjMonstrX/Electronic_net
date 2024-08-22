@@ -14,7 +14,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name='название продукта')
     model = models.CharField(max_length=255, verbose_name='модель продукта', **NULLABLE)
     description = models.TextField(verbose_name='описание продукта', **NULLABLE)
-    release_date = models.DateField(verbose_name='дата выхода на рынок')
+    release_date = models.DateField(verbose_name='дата выхода на рынок', **NULLABLE)
 
     class Meta:
         verbose_name = 'Продукт'

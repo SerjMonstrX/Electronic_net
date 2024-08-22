@@ -14,7 +14,7 @@ class IsOwner(BasePermission):
     Проверяет, является ли пользователь создателем объекта.
     """
     def has_object_permission(self, request, view, obj):
-        return request.user == obj.owner
+        return request.user == obj.creator
 
 
 class IsActiveUser(BasePermission):

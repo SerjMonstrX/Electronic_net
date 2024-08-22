@@ -49,7 +49,6 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
         # Обновление группы модераторов
         moderators_group, _ = Group.objects.get_or_create(name='moderators')
-        employees_group, _ = Group.objects.get_or_create(name='Сотрудники')
 
         if self.is_moderator:
             self.groups.add(moderators_group)

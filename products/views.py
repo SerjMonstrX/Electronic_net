@@ -9,7 +9,7 @@ from .serializers import ProductSerializer
 class ProductCreateView(generics.CreateAPIView):
     """
     API-представление для создания нового продукта.
-    Позволяет аутентифицированным пользователям добавлять продукты.
+    Позволяет аутентифицированным и активным пользователям добавлять продукты.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -22,6 +22,7 @@ class ProductCreateView(generics.CreateAPIView):
 class ProductListView(generics.ListAPIView):
     """
     API-представление для получения списка всех продуктов.
+    Позволяет аутентифицированным и активным пользователям просматривать список всех продуктов.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -31,6 +32,7 @@ class ProductListView(generics.ListAPIView):
 class ProductDetailView(generics.RetrieveAPIView):
     """
     API-представление для получения информации о продукте по его ID.
+    Позволяет аутентифицированным и активным пользователям просматривать детали конкретного продукта.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -40,6 +42,7 @@ class ProductDetailView(generics.RetrieveAPIView):
 class ProductUpdateView(generics.UpdateAPIView):
     """
     API-представление для обновления информации о продукте.
+    Позволяет владельцу или модератору изменять информацию о продукте.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -58,6 +61,7 @@ class ProductUpdateView(generics.UpdateAPIView):
 class ProductDeleteView(generics.DestroyAPIView):
     """
     API-представление для удаления продукта.
+    Позволяет владельцу или модератору удалять продукты.
     """
     queryset = Product.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsActiveUser, IsOwner | IsModerator]

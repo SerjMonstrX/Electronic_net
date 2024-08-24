@@ -3,6 +3,9 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для продукта.
+    """
     class Meta:
         model = Product
         fields = ['id', 'name', 'model', 'release_date', 'creator', 'network_entity']

@@ -6,6 +6,9 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели пользователя.
+    """
     class Meta:
         model = User
         fields = ('email', 'is_moderator', 'is_active', 'password')
@@ -23,6 +26,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
+    """
+    Сериализатор для аутентификации пользователя.
+    """
     email = serializers.EmailField()
     password = serializers.CharField()
 

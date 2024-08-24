@@ -10,7 +10,7 @@ from .serializers import NetworkEntitySerializer
 class NetworkEntityCreateView(generics.CreateAPIView):
     """
     API-представление для создания нового участника сети.
-    Позволяет аутентифицированным пользователям создавать разделы.
+    Позволяет аутентифицированным и активным пользователям создавать разделы.
     """
     queryset = NetworkEntity.objects.all()
     serializer_class = NetworkEntitySerializer
@@ -21,6 +21,10 @@ class NetworkEntityCreateView(generics.CreateAPIView):
 
 
 class NetworkEntityListView(generics.ListAPIView):
+    """
+    API-представление для создания нового участника сети.
+    Позволяет аутентифицированным и активным пользователям просматривать список всех участников сети.
+    """
     queryset = NetworkEntity.objects.all()
     serializer_class = NetworkEntitySerializer
     filter_backends = [DjangoFilterBackend]
@@ -29,26 +33,38 @@ class NetworkEntityListView(generics.ListAPIView):
 
 
 class NetworkEntityDetailView(generics.RetrieveAPIView):
+    """
+    API-представление для создания нового участника сети.
+    Позволяет аутентифицированным и активным пользователям просматривать детали конкретного участника сети.
+    """
     queryset = NetworkEntity.objects.all()
     serializer_class = NetworkEntitySerializer
     permission_classes = [permissions.IsAuthenticated, IsActiveUser]
 
 
 class NetworkEntityUpdateView(generics.UpdateAPIView):
+    """
+    API-представление для создания нового участника сети.
+    Позволяет владельцу или модератору редактировать информацию об участнике сети.
+    """
     queryset = NetworkEntity.objects.all()
     serializer_class = NetworkEntitySerializer
     permission_classes = [permissions.IsAuthenticated, IsActiveUser, IsOwner | IsModerator]
 
     def perform_update(self, serializer):
         user = self.request.user
-        newtwork_id = self.kwargs['pk']
-        newtwork = NetworkEntity.objects.get(pk=newtwork_id)
-        if newtwork.creator == user or user.groups.filter(name='moderators').exists():
+        network_id = self.kwargs['pk']
+        network = NetworkEntity.objects.get(pk=network_id)
+        if network.creator == user or user.groups.filter(name='moderators').exists():
             serializer.save()
         else:
             raise PermissionDenied("У вас нет разрешения редактировать этот раздел.")
 
 
 class NetworkEntityDeleteView(generics.DestroyAPIView):
+    """
+    API-представление для создания нового участника сети.
+    Позволяет владельцу или модератору удалять участников сети.
+    """
     queryset = NetworkEntity.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsActiveUser, IsOwner | IsModerator]

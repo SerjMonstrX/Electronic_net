@@ -3,10 +3,10 @@ from .models import NetworkEntity
 
 
 class NetworkEntitySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для объекта сети.
+    """
     class Meta:
         model = NetworkEntity
         fields = '__all__'
-        extra_kwargs = {
-            'debt': {'read_only': True}  # Запрещаем обновление поля "debt" через API
-        }
-        read_only_fields = ['creator']
+        read_only_fields = ['creator', 'debt']

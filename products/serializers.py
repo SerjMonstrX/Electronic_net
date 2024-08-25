@@ -21,3 +21,18 @@ class ProductSerializer(serializers.ModelSerializer):
         # Сохраняем обновленный объект
         instance.save()
         return instance
+
+    def validate(self, data):
+        network_entity = data.get('network_entity')
+        if network_entity.supplier_type == 0:  # Завод
+            return data
+        elif Product.objects.filter(
+                network_entity=network_entity.supplier,
+                name=data.get('name'),
+                model=data.get('model')
+        ).exists():
+            return data
+        else:
+            raise serializers.ValidationError(
+                "Продукт должен существовать у поставщика."
+            )
